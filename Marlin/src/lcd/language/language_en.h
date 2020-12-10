@@ -38,16 +38,16 @@ namespace Language_en {
   constexpr uint8_t    CHARSIZE                            = 2;
   PROGMEM Language_Str LANGUAGE                            = _UxGT("English");
 
-  PROGMEM Language_Str WELCOME_MSG                         = MACHINE_NAME _UxGT(" Ready.");
+  PROGMEM Language_Str WELCOME_MSG                         = MACHINE_NAME _UxGT(" Alive.");
   PROGMEM Language_Str MSG_MARLIN                          = _UxGT("Marlin");
   PROGMEM Language_Str MSG_YES                             = _UxGT("YES");
   PROGMEM Language_Str MSG_NO                              = _UxGT("NO");
   PROGMEM Language_Str MSG_BACK                            = _UxGT("Back");
   PROGMEM Language_Str MSG_MEDIA_ABORTING                  = _UxGT("Aborting...");
-  PROGMEM Language_Str MSG_MEDIA_INSERTED                  = _UxGT("Media Inserted");
-  PROGMEM Language_Str MSG_MEDIA_REMOVED                   = _UxGT("Media Removed");
-  PROGMEM Language_Str MSG_MEDIA_WAITING                   = _UxGT("Waiting for media");
-  PROGMEM Language_Str MSG_SD_INIT_FAIL                    = _UxGT("SD Init Fail");
+  PROGMEM Language_Str MSG_MEDIA_INSERTED                  = _UxGT("Input Inserted");
+  PROGMEM Language_Str MSG_MEDIA_REMOVED                   = _UxGT("Input Removed");
+  PROGMEM Language_Str MSG_MEDIA_WAITING                   = _UxGT("Waiting for input");
+  PROGMEM Language_Str MSG_SD_INIT_FAIL                    = _UxGT("Input Fail");
   PROGMEM Language_Str MSG_MEDIA_READ_ERROR                = _UxGT("Media read error");
   PROGMEM Language_Str MSG_MEDIA_USB_REMOVED               = _UxGT("USB device removed");
   PROGMEM Language_Str MSG_MEDIA_USB_FAILED                = _UxGT("USB start failed");
@@ -343,7 +343,7 @@ namespace Language_en {
   PROGMEM Language_Str MSG_ERR_EEPROM_CRC                  = _UxGT("EEPROM CRC Error");
   PROGMEM Language_Str MSG_ERR_EEPROM_INDEX                = _UxGT("EEPROM Index Error");
   PROGMEM Language_Str MSG_ERR_EEPROM_VERSION              = _UxGT("EEPROM Version Error");
-  PROGMEM Language_Str MSG_SETTINGS_STORED                 = _UxGT("Settings Stored");
+  PROGMEM Language_Str MSG_SETTINGS_STORED                 = _UxGT("INPUT Stored");
   PROGMEM Language_Str MSG_MEDIA_UPDATE                    = _UxGT("Media Update");
   PROGMEM Language_Str MSG_RESET_PRINTER                   = _UxGT("Reset Printer");
   PROGMEM Language_Str MSG_REFRESH                         = LCD_STR_REFRESH _UxGT("Refresh");
@@ -486,8 +486,8 @@ namespace Language_en {
   PROGMEM Language_Str MSG_DELTA_DIAG_ROD                  = _UxGT("Diag Rod");
   PROGMEM Language_Str MSG_DELTA_HEIGHT                    = _UxGT("Height");
   PROGMEM Language_Str MSG_DELTA_RADIUS                    = _UxGT("Radius");
-  PROGMEM Language_Str MSG_INFO_MENU                       = _UxGT("About Printer");
-  PROGMEM Language_Str MSG_INFO_PRINTER_MENU               = _UxGT("Printer Info");
+  PROGMEM Language_Str MSG_INFO_MENU                       = _UxGT("About Johnny 5");
+  PROGMEM Language_Str MSG_INFO_PRINTER_MENU               = _UxGT("Johnny 5 Info");
   PROGMEM Language_Str MSG_3POINT_LEVELING                 = _UxGT("3-Point Leveling");
   PROGMEM Language_Str MSG_LINEAR_LEVELING                 = _UxGT("Linear Leveling");
   PROGMEM Language_Str MSG_BILINEAR_LEVELING               = _UxGT("Bilinear Leveling");
