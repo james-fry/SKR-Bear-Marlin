@@ -30,7 +30,7 @@
 //===========================================================================
 
 // "SKR Bear" or "SKR Caribou" will be used by default. Uncomment to set a custom printer name.
-//#define PRUSA_SKR_CUSTOM_NAME "3D Printer"
+#define PRUSA_SKR_CUSTOM_NAME "SKRTitanBear"
 
 //===========================================================================
 //=========================== Printer/Frame Type ============================
@@ -56,7 +56,7 @@
  * Options:  1: BigTreeTech SKR 1.4        (LPC1768)
  *           2: BigTreeTech SKR 1.4 Turbo  (LPC1769)  // Change default_envs in platformio.ini to LPC1769
  */
-#define PRUSA_SKR_MOTHERBOARD 1
+#define PRUSA_SKR_MOTHERBOARD 2
 
 //===========================================================================
 //============================= Stepper Motors ==============================
@@ -72,7 +72,7 @@
  *           3: LDO 0.9° pancake
  *           4: LDO planetary
  */
-#define PRUSA_SKR_E_STEPPER 1
+#define PRUSA_SKR_E_STEPPER 2
 
 /**
  * X/Y Stepper Motors
@@ -117,7 +117,7 @@
  *            3: Bondtech BMG extruder w/ PINDA V2 or SuperPINDA https://www.bondtech.se/en/product/prusa-i3-mk3s-extruder-upgrade/
  *            4: Bondtech BMG extruder w/ BLTouch mount by Vertigo 235 https://www.prusaprinters.org/prints/6623
  */
-#define PRUSA_SKR_EXTRUDER 1
+#define PRUSA_SKR_EXTRUDER 3
 
 /**
  * Pinda Probe
@@ -137,7 +137,7 @@
  * If needed, uncomment to customize probe offset. This can also be customized via LCD
  * under Configuration -> Advanced Settings -> Probe Offsets
  */
-//#define PRUSA_SKR_NOZZLE_TO_PROBE_OFFSET { 23, 5, 0 }
+#define PRUSA_SKR_NOZZLE_TO_PROBE_OFFSET { 23, 5, -0.95 }  // JF - Updated for SKR Titan Bear
 
 /**
  * Part Cooling Fan
@@ -171,19 +171,29 @@
  *
  * If needed, uncomment PRUSA_SKR_CUSTOM_HOTEND_PID or PRUSA_SKR_CUSTOM_BED_PID to customize PID settings.
  */
-//#define PRUSA_SKR_CUSTOM_HOTEND_PID
+#define PRUSA_SKR_CUSTOM_HOTEND_PID
 #if ENABLED(PRUSA_SKR_CUSTOM_HOTEND_PID)
-  #define PRUSA_SKR_DEFAULT_Kp  16.50
-  #define PRUSA_SKR_DEFAULT_Ki   1.16
-  #define PRUSA_SKR_DEFAULT_Kd  58.80
+  //#define PRUSA_SKR_DEFAULT_Kp  16.50
+  //#define PRUSA_SKR_DEFAULT_Ki   1.16
+  //#define PRUSA_SKR_DEFAULT_Kd  58.80
+
+  #define PRUSA_SKR_DEFAULT_Kp 19.9218  // JF - added after PID tune for SKR titan bear (M303 E0 S210 C8)
+  #define PRUSA_SKR_DEFAULT_Ki 1.3335   // JF - added after PID tune for SKR titan bear (M303 E0 S210 C8)
+  #define PRUSA_SKR_DEFAULT_Kd 74.4080  // JF - added after PID tune for SKR titan bear (M303 E0 S210 C8)
   // Find your own by running "M303 E0 C8 S210" via serial to run autotune on the hotend at 210 °C for 8 cycles.
+
 #endif
 
-//#define PRUSA_SKR_CUSTOM_BED_PID
+#define PRUSA_SKR_CUSTOM_BED_PID
 #if ENABLED(PRUSA_SKR_CUSTOM_BED_PID)
-  #define PRUSA_SKR_DEFAULT_bedKp  28.13
-  #define PRUSA_SKR_DEFAULT_bedKi   2.09
-  #define PRUSA_SKR_DEFAULT_bedKd 483.07
+  //#define PRUSA_SKR_DEFAULT_bedKp  28.13
+  //#define PRUSA_SKR_DEFAULT_bedKi   2.09
+  //#define PRUSA_SKR_DEFAULT_bedKd 483.07
+
+  #define PRUSA_SKR_DEFAULT_bedKp 36.6011   // JF - added after PID tune for SKR titan bear (M303 E-1 C8 S65)
+  #define PRUSA_SKR_DEFAULT_bedKi 1.8301    // JF - added after PID tune for SKR titan bear (M303 E-1 C8 S65)
+  #define PRUSA_SKR_DEFAULT_bedKd 488.0143  // JF - added after PID tune for SKR titan bear (M303 E-1 C8 S65)
+
   // Find your own by running "M303 E-1 C8 S65" via serial to run autotune on the bed at 65 °C for 8 cycles.
 #endif
 
@@ -235,7 +245,7 @@
 //===========================================================================
 
 // NeoPixels are disabled by default. Uncomment to enable.
-//#define PRUSA_SKR_NEOPIXELS
+#define PRUSA_SKR_NEOPIXELS
 #if ENABLED(PRUSA_SKR_NEOPIXELS)
   /**
    * NeoPixel Type
@@ -245,6 +255,6 @@
    */
   #define PRUSA_SKR_NEOPIXEL_TYPE          1
 
-  #define PRUSA_SKR_NEOPIXEL_PIXELS       17    // 17 NeoPixels fit in the top 2040 extrusion
-  #define PRUSA_SKR_NEOPIXEL_BRIGHTNESS  255    // 255 is max brightness
+  #define PRUSA_SKR_NEOPIXEL_PIXELS       46    // 17 NeoPixels fit in the top 2040 extrusion
+  #define PRUSA_SKR_NEOPIXEL_BRIGHTNESS  200    // 255 is max brightness
 #endif
