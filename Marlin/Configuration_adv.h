@@ -31,7 +31,7 @@
  * Basic settings can be found in Configuration.h
  */
 #define CONFIGURATION_ADV_H_VERSION 020008
-#define PRUSA_SKR_CONFIGURATION_VERSION 20210129
+#define PRUSA_SKR_CONFIGURATION_VERSION 20210306
 
 //===========================================================================
 //============================= Thermal Settings ============================
@@ -114,6 +114,12 @@
   #define CHAMBER_BETA                 3950    // Beta value
 #endif
 
+#if TEMP_SENSOR_COOLER == 1000
+  #define COOLER_PULLUP_RESISTOR_OHMS 4700    // Pullup resistor
+  #define COOLER_RESISTANCE_25C_OHMS  100000  // Resistance at 25C
+  #define COOLER_BETA                 3950    // Beta value
+#endif
+
 #if TEMP_SENSOR_PROBE == 1000
   #define PROBE_PULLUP_RESISTOR_OHMS   4700    // Pullup resistor
   #define PROBE_RESISTANCE_25C_OHMS    100000  // Resistance at 25C
@@ -177,6 +183,25 @@
     #define LOW_EXCESS_HEAT_LIMIT  3
     #define MIN_COOLING_SLOPE_TIME_CHAMBER_VENT 20
     #define MIN_COOLING_SLOPE_DEG_CHAMBER_VENT 1.5
+  #endif
+#endif
+
+//
+// Laser Cooler options
+//
+#if TEMP_SENSOR_COOLER
+  #define COOLER_MINTEMP           8  // (°C)
+  #define COOLER_MAXTEMP          26  // (°C)
+  #define COOLER_DEFAULT_TEMP     16  // (°C)
+  #define TEMP_COOLER_HYSTERESIS   1  // (°C) Temperature proximity considered "close enough" to the target
+  #define COOLER_PIN               8  // Laser cooler on/off pin used to control power to the cooling element e.g. TEC, External chiller via relay
+  #define COOLER_INVERTING     false
+  #define TEMP_COOLER_PIN         15  // Laser/Cooler temperature sensor pin. ADC is required.
+  #define COOLER_FAN                  // Enable a fan on the cooler, Fan# 0,1,2,3 etc.
+  #define COOLER_FAN_INDEX         0  // FAN number 0, 1, 2 etc. e.g.
+  #if ENABLED(COOLER_FAN)
+    #define COOLER_FAN_BASE      100  // Base Cooler fan PWM (0-255); turns on when Cooler temperature is above the target
+    #define COOLER_FAN_FACTOR     25  // PWM increase per °C above target
   #endif
 #endif
 
@@ -247,6 +272,20 @@
    */
   #define WATCH_CHAMBER_TEMP_PERIOD            60 // Seconds
   #define WATCH_CHAMBER_TEMP_INCREASE           2 // Degrees Celsius
+#endif
+
+/**
+ * Thermal Protection parameters for the laser cooler.
+ */
+#if ENABLED(THERMAL_PROTECTION_COOLER)
+  #define THERMAL_PROTECTION_COOLER_PERIOD    10 // Seconds
+  #define THERMAL_PROTECTION_COOLER_HYSTERESIS 3 // Degrees Celsius
+
+  /**
+   * Laser cooling watch settings (M143/M193).
+   */
+  #define WATCH_COOLER_TEMP_PERIOD            60 // Seconds
+  #define WATCH_COOLER_TEMP_INCREASE           3 // Degrees Celsius
 #endif
 
 #if ENABLED(PIDTEMP)
@@ -494,11 +533,15 @@
 #define E6_AUTO_FAN_PIN -1
 #define E7_AUTO_FAN_PIN -1
 #define CHAMBER_AUTO_FAN_PIN -1
+#define COOLER_AUTO_FAN_PIN -1
+#define COOLER_FAN_PIN -1
 
 #define EXTRUDER_AUTO_FAN_TEMPERATURE 50
 #define EXTRUDER_AUTO_FAN_SPEED 255   // 255 == full speed
 #define CHAMBER_AUTO_FAN_TEMPERATURE 30
 #define CHAMBER_AUTO_FAN_SPEED 255
+#define COOLER_AUTO_FAN_TEMPERATURE 18
+#define COOLER_AUTO_FAN_SPEED 255
 
 /**
  * Part-Cooling Fan Multiplexer
@@ -1496,6 +1539,7 @@
   #define STATUS_BED_ANIM             // Use a second bitmap to indicate bed heating
   #define STATUS_CHAMBER_ANIM         // Use a second bitmap to indicate chamber heating
   //#define STATUS_CUTTER_ANIM        // Use a second bitmap to indicate spindle / laser active
+  //#define STATUS_COOLER_ANIM        // Use a second bitmap to indicate laser cooling
   //#define STATUS_ALT_BED_BITMAP     // Use the alternative bed bitmap
   //#define STATUS_ALT_FAN_BITMAP     // Use the alternative fan bitmap
   //#define STATUS_FAN_FRAMES 3       // :[0,1,2,3,4] Number of fan animation frames
@@ -3330,7 +3374,9 @@
   //#define GCODE_QUOTED_STRINGS  // Support for quoted string parameters
 #endif
 
-//#define MEATPACK                // Support for MeatPack G-code compression (https://github.com/scottmudge/OctoPrint-MeatPack)
+// Support for MeatPack G-code compression (https://github.com/scottmudge/OctoPrint-MeatPack)
+//#define MEATPACK_ON_SERIAL_PORT_1
+//#define MEATPACK_ON_SERIAL_PORT_2
 
 //#define GCODE_CASE_INSENSITIVE  // Accept G-code sent to the firmware in lowercase
 
@@ -3377,7 +3423,7 @@
 //#define CUSTOM_USER_BUTTONS
 #if ENABLED(CUSTOM_USER_BUTTONS)
   //#define BUTTON1_PIN -1
-  #if PIN_EXISTS(BUTTON1_PIN)
+  #if PIN_EXISTS(BUTTON1)
     #define BUTTON1_HIT_STATE     LOW       // State of the triggered button. NC=LOW. NO=HIGH.
     #define BUTTON1_WHEN_PRINTING false     // Button allowed to trigger during printing?
     #define BUTTON1_GCODE         "G28"
@@ -3385,7 +3431,7 @@
   #endif
 
   //#define BUTTON2_PIN -1
-  #if PIN_EXISTS(BUTTON2_PIN)
+  #if PIN_EXISTS(BUTTON2)
     #define BUTTON2_HIT_STATE     LOW
     #define BUTTON2_WHEN_PRINTING false
     #define BUTTON2_GCODE         "M140 S" STRINGIFY(PREHEAT_1_TEMP_BED) "\nM104 S" STRINGIFY(PREHEAT_1_TEMP_HOTEND)
@@ -3393,7 +3439,7 @@
   #endif
 
   //#define BUTTON3_PIN -1
-  #if PIN_EXISTS(BUTTON3_PIN)
+  #if PIN_EXISTS(BUTTON3)
     #define BUTTON3_HIT_STATE     LOW
     #define BUTTON3_WHEN_PRINTING false
     #define BUTTON3_GCODE         "M140 S" STRINGIFY(PREHEAT_2_TEMP_BED) "\nM104 S" STRINGIFY(PREHEAT_2_TEMP_HOTEND)
@@ -3411,6 +3457,7 @@
   #define USER_SCRIPT_DONE "M117 Completed"
   //#define USER_SCRIPT_AUDIBLE_FEEDBACK
   #define USER_SCRIPT_RETURN  // Return to status screen after a script
+  #define CUSTOM_MENU_ONLY_IDLE   // Only show custom menu when the machine is idle
 
   #define Z_CAL_DESC " Z Calibration"
   #define Z_CAL_PRE_UBL "G28\nM107\nG29 L1\nG29 J2\nG1 X2.0 Y-2.0 Z0.60 F3000\nM140 S"
@@ -3419,71 +3466,93 @@
 
   #define USER_DESC_1 "Nozzle Change"
   #define USER_GCODE_1 "G28\nG1 X125 Y105 Z140 F2000\nM104 S275\nM117 Setting Nozzle to 275C\nG4 s10\nM0 Click when Finished\nM104 S0"
+  #define USER_CONFIRM_1
 
   #define USER_DESC_2 "Full Calibration"
   #define USER_GCODE_2 "M140 S60\nM190 S60\nG28\nG34\nG29\nM500\nM140 S0\nG28"
+  #define USER_CONFIRM_2
 
   #define USER_DESC_3 "Auto Cold Pull"
   #define USER_GCODE_3 "G28\nM83\nG92 E0.00\nG21\nG1 X125 Y105 Z30\nM109 S250\nG1 E10.00 F6.5\nM109 S95\nM18 E\nM0 Pull your filament out\nM106 S0\nM109 S0"
+  #define USER_CONFIRM_3
 
   #if PRUSA_SKR_BED_LEVELING == 1 // Bilinear
     #define USER_DESC_4 PREHEAT_1_LABEL Z_CAL_DESC
     #define USER_GCODE_4 Z_CAL_PRE_ABL STRINGIFY(PREHEAT_1_TEMP_BED) "\nM190 S" STRINGIFY(PREHEAT_1_TEMP_BED) "\nM104 S160\nM109 S160\nG29\nG1 X2.0 Y-2.0 Z0.60\nM104 S" STRINGIFY(PREHEAT_1_TEMP_HOTEND) "\nM109 S" STRINGIFY(PREHEAT_1_TEMP_HOTEND) Z_CAL_END
+    #define USER_CONFIRM_4
 
     #define USER_DESC_5 PREHEAT_2_LABEL Z_CAL_DESC
     #define USER_GCODE_5 Z_CAL_PRE_ABL STRINGIFY(PREHEAT_2_TEMP_BED) "\nM190 S" STRINGIFY(PREHEAT_2_TEMP_BED) "\nM104 S160\nM109 S160\nG29\nG1 X2.0 Y-2.0 Z0.60\nM104 S" STRINGIFY(PREHEAT_2_TEMP_HOTEND) "\nM109 S" STRINGIFY(PREHEAT_2_TEMP_HOTEND) Z_CAL_END
+    #define USER_CONFIRM_5
 
     #define USER_DESC_6 PREHEAT_3_LABEL Z_CAL_DESC
     #define USER_GCODE_6 Z_CAL_PRE_ABL STRINGIFY(PREHEAT_3_TEMP_BED) "\nM190 S" STRINGIFY(PREHEAT_3_TEMP_BED) "\nM104 S160\nM109 S160\nG29\nG1 X2.0 Y-2.0 Z0.60\nM104 S" STRINGIFY(PREHEAT_3_TEMP_HOTEND) "\nM109 S" STRINGIFY(PREHEAT_3_TEMP_HOTEND) Z_CAL_END
+    #define USER_CONFIRM_6
 
     #define USER_DESC_7 PREHEAT_4_LABEL Z_CAL_DESC
     #define USER_GCODE_7 Z_CAL_PRE_ABL STRINGIFY(PREHEAT_4_TEMP_BED) "\nM190 S" STRINGIFY(PREHEAT_4_TEMP_BED) "\nM104 S160\nM109 S160\nG29\nG1 X2.0 Y-2.0 Z0.60\nM104 S" STRINGIFY(PREHEAT_4_TEMP_HOTEND) "\nM109 S" STRINGIFY(PREHEAT_4_TEMP_HOTEND) Z_CAL_END
+    #define USER_CONFIRM_7
   #elif PRUSA_SKR_BED_LEVELING == 2 // UBL
     #define USER_DESC_4 PREHEAT_1_LABEL Z_CAL_DESC
     #define USER_GCODE_4 Z_CAL_PRE_UBL STRINGIFY(PREHEAT_1_TEMP_BED) "\nM104 S" STRINGIFY(PREHEAT_1_TEMP_HOTEND) "\nM190 S" STRINGIFY(PREHEAT_1_TEMP_BED) "\nM109 S" STRINGIFY(PREHEAT_1_TEMP_HOTEND) Z_CAL_END
+    #define USER_CONFIRM_4
 
     #define USER_DESC_5 PREHEAT_2_LABEL Z_CAL_DESC
     #define USER_GCODE_5 Z_CAL_PRE_UBL STRINGIFY(PREHEAT_2_TEMP_BED) "\nM104 S" STRINGIFY(PREHEAT_2_TEMP_HOTEND) "\nM190 S" STRINGIFY(PREHEAT_2_TEMP_BED) "\nM109 S" STRINGIFY(PREHEAT_2_TEMP_HOTEND) Z_CAL_END
+    #define USER_CONFIRM_5
 
     #define USER_DESC_6 PREHEAT_3_LABEL Z_CAL_DESC
     #define USER_GCODE_6 Z_CAL_PRE_UBL STRINGIFY(PREHEAT_3_TEMP_BED) "\nM104 S" STRINGIFY(PREHEAT_3_TEMP_HOTEND) "\nM190 S" STRINGIFY(PREHEAT_3_TEMP_BED) "\nM109 S" STRINGIFY(PREHEAT_3_TEMP_HOTEND) Z_CAL_END
+    #define USER_CONFIRM_6
 
     #define USER_DESC_7 PREHEAT_4_LABEL Z_CAL_DESC
     #define USER_GCODE_7 Z_CAL_PRE_UBL STRINGIFY(PREHEAT_4_TEMP_BED) "\nM104 S" STRINGIFY(PREHEAT_4_TEMP_HOTEND) "\nM190 S" STRINGIFY(PREHEAT_4_TEMP_BED) "\nM109 S" STRINGIFY(PREHEAT_4_TEMP_HOTEND) Z_CAL_END
+    #define USER_CONFIRM_7
 
     #define USER_DESC_8 "Probe UBL Slot 1" //Use probe to setup UBL.
     #define USER_GCODE_8 "G28\nG1 X0.00 Y0.00 F3000\nM190 S65\nG29 P1\nG29 P3\nG29 S1\nG29 A\nG29 F 10.0\nM500\nM140 S0\nM0 Mesh Saved in Slot 1"
+    #define USER_CONFIRM_8
 
     #define USER_DESC_9 "Probe UBL Slot 2" //Use probe to setup UBL.
     #define USER_GCODE_9 "G28\nG1 X0.00 Y0.00 F3000\nM190 S65\nG29 P1\nG29 P3\nG29 S2\nG29 A\nG29 F 10.0\nM500\nM140 S0\nM0 Mesh Saved in Slot 2"
+    #define USER_CONFIRM_9
 
     #define USER_DESC_10 "Probe UBL Slot 3" //Use probe to setup UBL.
     #define USER_GCODE_10 "G28\nG1 X0.00 Y0.00 F3000\nM190 S65\nG29 P1\nG29 P3\nG29 S3\nG29 A\nG29 F 10.0\nM500\nM140 S0\nM0 Mesh Saved in Slot 3"
+    #define USER_CONFIRM_10
 
     #define USER_DESC_11 "Probe UBL Slot 4" //Use probe to setup UBL.
     #define USER_GCODE_11 "G28\nG1 X0.00 Y0.00 F3000\nM190 S65\nG29 P1\nG29 P3\nG29 S4\nG29 A\nG29 F 10.0\nM500\nM140 S0\nM0 Mesh Saved in Slot 4"
+    #define USER_CONFIRM_11
 
     #define USER_DESC_12 "Probe UBL Slot 5" //Use probe to setup UBL.
     #define USER_GCODE_12 "G28\nG1 X0.00 Y0.00 F3000\nM190 S65\nG29 P1\nG29 P3\nG29 S5\nG29 A\nG29 F 10.0\nM500\nM140 S0\nM0 Mesh Saved in Slot 5"
+    #define USER_CONFIRM_12
 
     #define USER_DESC_13 "UBL Offset Step 2"
     #define USER_GCODE_13 "G28\nG1 X125 Y105 Z0.00\nM211 S0\nM0 Set Z Offset"
+    #define USER_CONFIRM_13
 
     #define USER_DESC_14 "UBL Offset Step 3"
     #define USER_GCODE_14 "M211 S1\nM500"
+    #define USER_CONFIRM_14
 
     #define USER_DESC_15 "Adjust Point Near" //Adjust nearest mesh point
     #define USER_GCODE_15 "G29 P4\nM500"
+    #define USER_CONFIRM_15
 
     #define USER_DESC_16 "Print Mesh Validation"
     #define USER_GCODE_16 "G28\nG26\nG28"
+    #define USER_CONFIRM_16
   #endif
 
   #define USER_DESC_17 "Firmware Updater"
-  #define USER_GCODE_17 "M0 Click to update firmware...\nM997"
+  #define USER_GCODE_17 "M997"
+  #define USER_CONFIRM_17
 
   #define USER_DESC_18 "Reset EEPROM"
   #define USER_GCODE_18 "M502\nM500\nM117 EEPROM values restored\nG4 S3\nM0 Click to continue..."
+  #define USER_CONFIRM_18
 #endif
 
 /**

@@ -4,7 +4,7 @@
 //===========================================================================
 
 #define CONFIGURATION_H_VERSION 020008
-#define PRUSA_SKR_CONFIGURATION_VERSION 20210129
+#define PRUSA_SKR_CONFIGURATION_VERSION 20210306
 
 //===========================================================================
 //=========================== Predefined Configs ============================
