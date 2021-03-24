@@ -36,6 +36,11 @@
 
 #include "../core/boards.h"
 #include "../core/macros.h"
+
+// Prusa SKR configuration files
+#include "../../Prusa_SKR_Configuration.h"
+#include "Prusa_SKR_Conditionals.h"
+
 #include "../../Configuration.h"
 
 #ifdef CUSTOM_VERSION_FILE
