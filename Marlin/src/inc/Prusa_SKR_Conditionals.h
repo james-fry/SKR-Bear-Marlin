@@ -4,7 +4,7 @@
 //===========================================================================
 
 #define CONFIGURATION_H_VERSION 020008
-#define PRUSA_SKR_CONFIGURATION_VERSION 20210306
+#define PRUSA_SKR_CONFIGURATION_VERSION 20210324
 
 //===========================================================================
 //=========================== Predefined Configs ============================
@@ -20,8 +20,12 @@
  */
 //#define PRUSA_SKR_CONF_CHRIS 1
 
-// Keith's Bear Config
-//#define PRUSA_SKR_CONF_AILUROS
+/**
+ * Keith's Bear Config
+ *
+ * Options:  1: Ailuros
+ */
+//#define PRUSA_SKR_CONF_KEITH 1
 
 //===========================================================================
 //============================== Printer Name ===============================
