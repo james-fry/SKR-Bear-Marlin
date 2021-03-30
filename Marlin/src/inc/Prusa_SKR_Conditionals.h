@@ -4,11 +4,13 @@
 //===========================================================================
 
 #define CONFIGURATION_H_VERSION 020008
-#define PRUSA_SKR_CONFIGURATION_VERSION 20210324
+#define PRUSA_SKR_CONFIGURATION_VERSION 20210330
 
 //===========================================================================
 //=========================== Predefined Configs ============================
 //===========================================================================
+
+// Coming soon
 
 /**
  * Chris' Bear/Caribou Configs
@@ -23,7 +25,7 @@
 /**
  * Keith's Bear Config
  *
- * Options:  1: Ailuros
+ * Option:  1: Ailuros
  */
 //#define PRUSA_SKR_CONF_KEITH 1
 

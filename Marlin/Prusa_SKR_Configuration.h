@@ -1,6 +1,6 @@
 #pragma once
 #define CONFIGURATION_H_VERSION 020008
-#define PRUSA_SKR_CONFIGURATION_VERSION 20210324
+#define PRUSA_SKR_CONFIGURATION_VERSION 20210330
 
 //===========================================================================
 //====================== All-in-One Prusa SKR Firmware ======================
